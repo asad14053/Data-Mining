@@ -1,0 +1,39 @@
+def main():
+    pdbs = ('1A1B','1A2B','1A3B')
+    for pdb_id in pdbs:
+        path = "https://files.rcsb.org/view/"+pdb_id+".pdb"
+        file_path = "./"+pdb_id+".pdb"
+
+        print(path, file_path)
+
+        urllib.request.urlretrieve(path, file_path)
+        print(file_path, ' is downloaded...')
+
+
+main()
+
+import urllib.request
+import os
+
+def download_pdb(pdb_id):
+    #pdb = '1A2B'
+    #pdb = ['1A2B','1A2C','1A2D']
+    #for i in pdb:
+    file_name = pdb_id+'.pdb'
+    path = 'https://files.rcsb.org/view/'
+    path += file_name
+    print(path)
+    local_path = './'
+    file_path = local_path+file_name
+    print(file_name.upper())
+    print(os.listdir(local_path))
+    if (os.path.exists(file_path.lower()) or os.path.exists(file_path.upper())): #(file_name.lower() in os.listdir(local_path) or file_name.upper() in os.listdir(local_path)):
+        print(file_name,'is already in ',local_path)
+    else:
+        try:
+            urllib.request.urlretrieve(path,file_path)
+            print(file_path,' is downloaded...')
+        except(urllib.error.HTTPError or TimeoutError or urllib.error.URLError):
+            print('Error: ', 'cannot download ', file_name, ' from ', path)
+
+download_pdb('1A2B')

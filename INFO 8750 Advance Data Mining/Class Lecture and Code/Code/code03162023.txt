@@ -1,0 +1,22 @@
+# This is a sample Python script.
+import re
+def main():
+    fruit = ['1 @pple#$&', '3 oranges', '5 grapes', '7 peaches', '9 blue berries', '11 pineapples', '12 lemons']
+    for i in fruit:
+        print(i)
+        a = re.search('(\d+)\s(.+)', i)
+        b = re.findall('\d+\s[\w@$#%&]+',i)
+
+        print(a)
+        print(a.string)
+        print(a.group(1))
+        print(a.group(2))
+    str = 'It rains in Spain.'
+    b = re.findall('[Srp]+ains?',str)
+    print(b)
+    c = re.sub('s|S', '$', str)
+    print(c)
+    d = re.split('s|S', str)
+    print(d)
+if __name__ == '__main__':
+    main()

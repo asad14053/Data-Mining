@@ -1,0 +1,64 @@
+def main():#quadratic equation
+    a = int(input("please input a: "))
+    b = int(input("Please input b: "))
+    c = int(input("please input c: "))
+    e = b*b-4*a*c
+    if e>0:
+        x1 = (-1*b+e**0.5)/2/a
+        x2 = (-1*b-e**0.5)/2/a
+        print("roots:",x1,x2)
+    elif e == 0:
+        x = -1*b/2/a;
+        print("root: ",x)
+    else:
+        print("no real roots")
+
+def main():#Newton's method
+    a = float(input("please input a: "))
+    b = float(input("Please input b: "))
+    c = float(input("please input c: "))
+    x = float(input("please input an initial value of x: "))
+    for i in range(10):
+        f_x = a*x**2+b*x+c
+        f1_x = 2*a*x+b
+        x = x-f_x/f1_x
+        print("now, x = ",x)
+
+def main():#Newton's method
+
+    x = float(input("please input an initial value of x: "))
+    for i in range(20):
+        f_x = 3*x**4+5*x**3+x**2-3*x+10
+        f1_x = 12*x**3+15*x**2+2*x-3
+        x = x-f_x/f1_x
+        print("now, x = ",x)
+
+
+def main():#Newton's method
+
+    x1 = float(input("please input an initial value of x: "))
+    x0 = x1+1
+    while(x0-x1>0.0001 or x0-x1< -0.0001):
+        x0 = x1
+        f_x = 3*x0**4+5*x0**3+x0**2-3*x0+10
+        f1_x = 12*x0**3+15*x0**2+2*x0-3
+        x1 = x0-f_x/f1_x
+        print("now, x = ",x1)
+
+import random
+def main():#random number
+    for i in range(10):
+        x = random.randint(1,6)
+        print(x)
+
+import random
+def main():#random number
+    seq = ''
+    for i in range(100):
+        seq += random.choice("ATCG")
+        print(seq)
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    main('PyCharm')
+

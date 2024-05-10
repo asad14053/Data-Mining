@@ -1,0 +1,494 @@
+import random   
+        
+def show_align_mat(seq1,seq2,m, num_or_not):
+    l1 = len(seq1)+1
+    l2 = len(seq2)+1
+    print('      ', end='')
+    for i in range(l1-1):
+        print('%3s' %seq1[i], end='')
+    print()
+    for i in range(l2):
+        if i==0:
+            print('   ',end='')
+        else:
+            print('%3s' %seq2[i-1], end='')
+        for j in range(l1):
+            if num_or_not:
+                print('%3d' %m[i][j], end='')
+            else:
+                print('%3s' %m[i][j], end='')
+        print()
+        
+def translation(seq):
+    seq1 = seq.upper()
+    pro1 = ""
+    
+    dna2aa = { 
+
+       "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L", 
+
+       "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S", 
+
+       "TAT": "Y", "TAC": "Y", "TAA": "stop", "TAG": "stop", 
+
+       "TGT": "C", "TGC": "C", "TGA": "stop", "TGG": "W", 
+
+       "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L", 
+
+       "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P", 
+
+       "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q", 
+
+       "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R", 
+
+       "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M", 
+
+       "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T", 
+
+       "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K", 
+
+       "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R", 
+
+       "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V", 
+
+       "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A", 
+
+       "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E", 
+
+       "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G"} 
+    
+    for i in ([0,1,2]): 
+       start_trans = False 
+      
+       for j in range(i,len(seq1)-2,3): 
+           #print(j, end =' ') 
+           dna = seq1[j]+seq1[j+1]+seq1[j+2] 
+           #print(dna)            
+
+           if(dna == "ATG"): 
+               start_trans = True 
+           if(start_trans): 
+               if dna == "TAG" or dna == "TAA" or dna == "TGA": 
+                   break 
+               else: 
+                   pro1 += dna2aa[dna]   
+    #print(pro1)           
+    return(pro1)
+
+def global_alignment_dna(seq1,seq2):
+    l1 = len(seq1)+1
+    l2 = len(seq2)+1
+    gap_penalty = -2
+    match = 3
+    mismatch = -3
+    m = [[0]*l1 for i in range(l2)] #score matrix
+    d = [['X']*l1 for i in range(l2)] #direction matrix
+    
+    for i in range(l2):
+        if i==0:
+            for j in range(1,l1):
+                m[i][j] = m[i][j-1] + gap_penalty
+                d[i][j] = 'L' #from the left
+        else:
+            for j in range(l1):
+                if j==0:
+                    m[i][j] = m[i-1][j] + gap_penalty
+                    d[i][j] = 'T' #from the top
+                else:
+                    left = m[i][j-1] + gap_penalty
+                    top = m[i-1][j] + gap_penalty
+                    if seq1[j-1] == seq2[i-1]:
+                        upleft = m[i-1][j-1] + match
+                    else:
+                        upleft = m[i-1][j-1] + mismatch
+                    m[i][j] = max(left, top, upleft)
+                    if m[i][j] == upleft:
+                        d[i][j] = 'D' #from upper left, diagonal
+                    elif m[i][j] == left:
+                        d[i][j] = 'L'
+                    else:
+                        d[i][j] ='T'
+                    
+    #show_align_mat(seq1,seq2,m, True)
+    #show_align_mat(seq1, seq2, d, False)
+    x = l1-1
+    y = l2-1
+    #print(m[y][x], d[y][x])
+    ali1 = ''
+    ali2 = ''
+    ali0 = ''
+    identical = 0   
+    gscore = m[y][x]
+    
+    while (x>0 and y>0):
+        if d[y][x] == 'D':
+            ali1 = seq1[x-1]+ali1
+            ali2 = seq2[y-1]+ali2
+            if seq1[x-1] == seq2[y-1]:
+                ali0 = '|' + ali0
+                identical+=1
+            else:
+                ali0 = ' ' + ali0
+            y-=1
+            x-=1
+        elif d[y][x] == 'T':
+            ali1 = '-'+ali1
+            ali2 = seq2[y-1] + ali2
+            ali0 = ' '+ali0
+            y-=1
+        elif d[y][x] == 'L':
+            ali1 = seq1[x-1]+ali1
+            ali2 = '-'+ali2
+            ali0 = ' '+ali0
+            x-=1
+        #print(m[y][x],d[y][x])
+    #print(len(seq1),len(seq2),identical/len(seq1))
+    #print(m[y][x], identical)
+    #print(ali1)
+    #print(ali0)
+    #print(ali2)
+    return(gscore)
+
+def global_alignment_pro(seq1,seq2,b):
+    l1 = len(seq1)+1
+    l2 = len(seq2)+1
+    gap_penalty = -2
+    #match = 3
+    #mismatch = -3
+    m = [[0]*l1 for i in range(l2)] #score matrix
+    d = [['X']*l1 for i in range(l2)] #direction matrix
+    
+    for i in range(l2):
+        if i==0:
+            for j in range(1,l1):
+                m[i][j] = m[i][j-1] + gap_penalty
+                d[i][j] = 'L' #from the left
+        else:
+            for j in range(l1):
+                if j==0:
+                    m[i][j] = m[i-1][j] + gap_penalty
+                    d[i][j] = 'T' #from the top
+                else:
+                    left = m[i][j-1] + gap_penalty
+                    top = m[i-1][j] + gap_penalty
+                    #if seq1[j-1] == seq2[i-1]:
+                     #   upleft = m[i-1][j-1] + match
+                    #else:
+                     #   upleft = m[i-1][j-1] + mismatch
+                    upleft = m[i-1][j-1] + b[seq1[j-1]][seq2[i-1]]
+                    m[i][j] = max(left, top, upleft)
+                    if m[i][j] == upleft:
+                        d[i][j] = 'D' #from upper left, diagonal
+                    elif m[i][j] == left:
+                        d[i][j] = 'L'
+                    else:
+                        d[i][j] ='T'
+                    
+    #show_align_mat(seq1,seq2,m, True)
+    #show_align_mat(seq1, seq2, d, False)
+    x = l1-1
+    y = l2-1
+    #print(m[y][x], d[y][x])
+    ali1 = ''
+    ali2 = ''
+    ali0 = ''
+    identical = 0   
+    gscore = m[y][x]
+    
+    while (x>0 and y>0):
+        if d[y][x] == 'D':
+            ali1 = seq1[x-1]+ali1
+            ali2 = seq2[y-1]+ali2
+            if seq1[x-1] == seq2[y-1]:
+                ali0 = '|' + ali0
+                identical+=1
+            else:
+                ali0 = ' ' + ali0
+            y-=1
+            x-=1
+        elif d[y][x] == 'T':
+            ali1 = '-'+ali1
+            ali2 = seq2[y-1] + ali2
+            ali0 = ' '+ali0
+            y-=1
+        elif d[y][x] == 'L':
+            ali1 = seq1[x-1]+ali1
+            ali2 = '-'+ali2
+            ali0 = ' '+ali0
+            x-=1
+        #print(m[y][x],d[y][x])
+    #print(len(seq1),len(seq2),identical/len(seq1))
+    #print(m[y][x], identical)
+    #print(ali1)
+    #print(ali0)
+    #print(ali2)
+    return(gscore)
+    
+def local_alignment_dna(seq1,seq2):
+    l1 = len(seq1)+1
+    l2 = len(seq2)+1
+    gap_penalty = -2
+    match = 3
+    mismatch = -3
+    highest_score = 0
+    x = 0
+    y = 0
+    m = [[0]*l1 for i in range(l2)] #score matrix
+    d = [['X']*l1 for i in range(l2)] #direction matrix
+    
+    for i in range(l2):
+        if i==0:
+            for j in range(1,l1):
+                m[i][j] = 0
+                d[i][j] = 'L' #from the left
+        else:
+            for j in range(l1):
+                if j==0:
+                    m[i][j] = 0
+                    d[i][j] = 'T' #from the top
+                else:
+                    left = m[i][j-1] + gap_penalty
+                    top = m[i-1][j] + gap_penalty
+                    if seq1[j-1] == seq2[i-1]:
+                        upleft = m[i-1][j-1] + match
+                    else:
+                        upleft = m[i-1][j-1] + mismatch
+                    m[i][j] = max(left, top, upleft)
+                    if m[i][j] == upleft:
+                        d[i][j] = 'D' #from upper left, diagonal
+                    elif m[i][j] == left:
+                        d[i][j] = 'L'
+                    else:
+                        d[i][j] ='T'
+                if m[i][j] < 0:
+                    m[i][j] = 0
+                if m[i][j] > highest_score:
+                    highest_score = m[i][j]
+                    x = j
+                    y = i
+                     
+    #show_align_mat(seq1,seq2,m, True)
+    #show_align_mat(seq1, seq2, d, False)
+    #print(y,x, m[y][x], d[y][x])
+    ali1 = ''
+    ali2 = ''
+    ali0 = ''
+    identical = 0 
+    lscore = m[y][x]
+    
+    while (m[y][x] > 0):
+        if d[y][x] == 'D':
+            ali1 = seq1[x-1]+ali1
+            ali2 = seq2[y-1]+ali2
+            if seq1[x-1] == seq2[y-1]:
+                ali0 = '|' + ali0
+                identical+=1
+            else:
+                ali0 = ' ' + ali0
+            y-=1
+            x-=1
+        elif d[y][x] == 'T':
+            ali1 = '-'+ali1
+            ali2 = seq2[y-1] + ali2
+            ali0 = ' '+ali0
+            y-=1
+        elif d[y][x] == 'L':
+            ali1 = seq1[x-1]+ali1
+            ali2 = '-'+ali2
+            ali0 = ' '+ali0
+            x-=1
+        #print(m[y][x],d[y][x])
+    #show_align_mat(seq1,seq2,m, True)
+    #print(len(seq1),len(seq2))
+    #print(m[y][x])
+    #print(ali1)
+    #print(ali0)
+    #print(ali2)
+    return(lscore)
+
+def local_alignment_pro(seq1,seq2,b):
+    l1 = len(seq1)+1
+    l2 = len(seq2)+1
+    gap_penalty = -2
+    #match = 3
+    #mismatch = -3
+    highest_score = 0
+    x = 0
+    y = 0
+    m = [[0]*l1 for i in range(l2)] #score matrix
+    d = [['X']*l1 for i in range(l2)] #direction matrix
+    
+    for i in range(l2):
+        if i==0:
+            for j in range(1,l1):
+                m[i][j] = 0
+                d[i][j] = 'L' #from the left
+        else:
+            for j in range(l1):
+                if j==0:
+                    m[i][j] = 0
+                    d[i][j] = 'T' #from the top
+                else:
+                    left = m[i][j-1] + gap_penalty
+                    top = m[i-1][j] + gap_penalty
+                    #if seq1[j-1] == seq2[i-1]:
+                        #upleft = m[i-1][j-1] + match
+                    #else:
+                        #upleft = m[i-1][j-1] + mismatch
+                    upleft = m[i-1][j-1] + b[seq1[j-1]][seq2[i-1]]
+                    m[i][j] = max(left, top, upleft)
+                    if m[i][j] == upleft:
+                        d[i][j] = 'D' #from upper left, diagonal
+                    elif m[i][j] == left:
+                        d[i][j] = 'L'
+                    else:
+                        d[i][j] ='T'
+                if m[i][j] < 0:
+                    m[i][j] = 0
+                if m[i][j] > highest_score:
+                    highest_score = m[i][j]
+                    x = j
+                    y = i
+                     
+    #show_align_mat(seq1,seq2,m, True)
+    #show_align_mat(seq1, seq2, d, False)
+    #print(y,x, m[y][x], d[y][x])
+    ali1 = ''
+    ali2 = ''
+    ali0 = ''
+    identical = 0 
+    lscore = m[y][x]
+    
+    while (m[y][x] > 0):
+        if d[y][x] == 'D':
+            ali1 = seq1[x-1]+ali1
+            ali2 = seq2[y-1]+ali2
+            if seq1[x-1] == seq2[y-1]:
+                ali0 = '|' + ali0
+                identical+=1
+            else:
+                ali0 = ' ' + ali0
+            y-=1
+            x-=1
+        elif d[y][x] == 'T':
+            ali1 = '-'+ali1
+            ali2 = seq2[y-1] + ali2
+            ali0 = ' '+ali0
+            y-=1
+        elif d[y][x] == 'L':
+            ali1 = seq1[x-1]+ali1
+            ali2 = '-'+ali2
+            ali0 = ' '+ali0
+            x-=1
+        #print(m[y][x],d[y][x])
+    #show_align_mat(seq1,seq2,m, True)
+    #print(len(seq1),len(seq2))
+    #print(m[y][x])
+    #print(ali1)
+    #print(ali0)
+    #print(ali2)
+    return(lscore)
+  
+def random_pro(l):
+    pro = ''
+    for i in range(l):
+        pro += random.choice('ARNDCQEGHILKMPFSTWYV')#make sure these are all correct AA's
+    return(pro)
+
+def significance_global(s1,s2,gscore,b):
+    n = 1000
+    nsc = [0]*n
+    sum = 0
+    sum2 = 0
+    for i in range(n):
+        s3 = random_pro(len(s2))
+        nsc[i] = global_alignment_pro(s1,s3,b)
+        sum+=nsc[i]
+        sum2+=nsc[i]**2
+        
+    avg = sum/n
+    stdev = (sum2/n-(avg)**2)**0.5 #change this equation to make it correct!
+    t = (gscore-avg)/stdev
+    print('Average global alignment score: ',avg)
+    print('Standard deviation of global alignment score: ',stdev)
+    
+    if t>2:
+        print("it is significant because t = ", t)
+    else:
+        print("not significant")
+
+def significance_local(s1,s2,lscore,b):
+    n = 1000
+    nsc = [0]*n
+    sum = 0
+    sum2 = 0
+    for i in range(n):
+        s3 = random_pro(len(s2))
+        nsc[i] = local_alignment_pro(s1,s3,b)
+        sum+=nsc[i]
+        sum2+=nsc[i]**2
+        
+    avg = sum/n
+    stdev = (sum2/n-(avg)**2)**0.5 #change this equation to make it correct!
+    t = (lscore-avg)/stdev
+    print('Average local alignment score: ',avg)
+    print('Standard deviation of local alignment score: ',stdev)
+    
+    if t>2:
+        print("it is significant because t = ", t)
+    else:
+        print("not significant")
+        
+    
+def main():
+    Blosum62 ={
+        'A': {'A': 4, 'R': -1, 'N': -2, 'D': -2, 'C': 0, 'Q': -1, 'E': -1, 'G': 0, 'H': -2, 'I': -1, 'L': -1, 'K': -1,'M': -1, 'F': -2, 'P': -1, 'S': 1, 'T': 0, 'W': -3, 'Y': -2, 'V': 0, },
+        'R': {'A': -1, 'R': 5, 'N': 0, 'D': -2, 'C': -3, 'Q': 1, 'E': 0, 'G': -2, 'H': 0, 'I': -3, 'L': -3, 'K': 2,'M': -1, 'F': -3, 'P': -2, 'S': -1, 'T': -1, 'W': -3, 'Y': -2, 'V': -3, },
+        'N': {'A': -2, 'R': 0, 'N': 6, 'D': 1, 'C': -3, 'Q': 0, 'E': 0, 'G': 0, 'H': 1, 'I': -3, 'L': -3, 'K': 0,'M': -2, 'F': -3, 'P': -2, 'S': 1, 'T': 0, 'W': -4, 'Y': -2, 'V': -3, },
+        'D': {'A': -2, 'R': -2, 'N': 1, 'D': 6, 'C': -3, 'Q': 0, 'E': 2, 'G': -1, 'H': -1, 'I': -3, 'L': -4, 'K': -1,'M': -3, 'F': -3, 'P': -1, 'S': 0, 'T': -1, 'W': -4, 'Y': -3, 'V': -3, },
+        'C': {'A': 0, 'R': -3, 'N': -3, 'D': -3, 'C': 9, 'Q': -3, 'E': -4, 'G': -3, 'H': -3, 'I': -1, 'L': -1, 'K': -3,'M': -1, 'F': -2, 'P': -3, 'S': -1, 'T': -1, 'W': -2, 'Y': -2, 'V': -1, },
+        'Q': {'A': -1, 'R': 1, 'N': 0, 'D': 0, 'C': -3, 'Q': 5, 'E': 2, 'G': -2, 'H': 0, 'I': -3, 'L': -2, 'K': 1,'M': 0, 'F': -3, 'P': -1, 'S': 0, 'T': -1, 'W': -2, 'Y': -1, 'V': -2, },
+        'E': {'A': -1, 'R': 0, 'N': 0, 'D': 2, 'C': -4, 'Q': 2, 'E': 5, 'G': -2, 'H': 0, 'I': -3, 'L': -3, 'K': 1,'M': -2, 'F': -3, 'P': -1, 'S': 0, 'T': -1, 'W': -3, 'Y': -2, 'V': -2, },
+        'G': {'A': 0, 'R': -2, 'N': 0, 'D': -1, 'C': -3, 'Q': -2, 'E': -2, 'G': 6, 'H': -2, 'I': -4, 'L': -4, 'K': -2,'M': -3, 'F': -3, 'P': -2, 'S': 0, 'T': -2, 'W': -2, 'Y': -3, 'V': -3, },
+        'H': {'A': -2, 'R': 0, 'N': 1, 'D': -1, 'C': -3, 'Q': 0, 'E': 0, 'G': -2, 'H': 8, 'I': -3, 'L': -3, 'K': -1,'M': -2, 'F': -1, 'P': -2, 'S': -1, 'T': -2, 'W': -2, 'Y': 2, 'V': -3, },
+        'I': {'A': -1, 'R': -3, 'N': -3, 'D': -3, 'C': -1, 'Q': -3, 'E': -3, 'G': -4, 'H': -3, 'I': 4, 'L': 2, 'K': -3,'M': 1, 'F': 0, 'P': -3, 'S': -2, 'T': -1, 'W': -3, 'Y': -1, 'V': 3, },
+        'L': {'A': -1, 'R': -2, 'N': -3, 'D': -4, 'C': -1, 'Q': -2, 'E': -3, 'G': -4, 'H': -3, 'I': 2, 'L': 4, 'K': -2,'M': 2, 'F': 0, 'P': -3, 'S': -2, 'T': -1, 'W': -2, 'Y': -1, 'V': 1, },
+        'K': {'A': -1, 'R': 2, 'N': 0, 'D': -1, 'C': -3, 'Q': 1, 'E': 1, 'G': -2, 'H': -1, 'I': -3, 'L': -2, 'K': 5,'M': -1, 'F': -3, 'P': -1, 'S': 0, 'T': -1, 'W': -3, 'Y': -2, 'V': -2, },
+        'M': {'A': -1, 'R': -1, 'N': -2, 'D': -3, 'C': -1, 'Q': 0, 'E': -2, 'G': -3, 'H': -2, 'I': 1, 'L': 2, 'K': -1,'M': 5, 'F': 0, 'P': -2, 'S': -1, 'T': -1, 'W': -1, 'Y': -1, 'V': 1, },
+        'F': {'A': -2, 'R': -3, 'N': -3, 'D': -3, 'C': -2, 'Q': -3, 'E': -3, 'G': -3, 'H': -1, 'I': 0, 'L': 0, 'K': -3,'M': 0, 'F': 6, 'P': -4, 'S': -2, 'T': -2, 'W': 1, 'Y': 3, 'V': -1, },
+        'P': {'A': -1, 'R': -2, 'N': -2, 'D': -1, 'C': -3, 'Q': -1, 'E': -1, 'G': -2, 'H': -2, 'I': -3, 'L': -3,'K': -1, 'M': -2, 'F': -4, 'P': 7, 'S': -1, 'T': -1, 'W': -4, 'Y': -3, 'V': -2, },
+        'S': {'A': 1, 'R': -1, 'N': 1, 'D': 0, 'C': -1, 'Q': 0, 'E': 0, 'G': 0, 'H': -1, 'I': -2, 'L': -2, 'K': 0,'M': -1, 'F': -2, 'P': -1, 'S': 4, 'T': 1, 'W': -3, 'Y': -2, 'V': -2, },
+        'T': {'A': 0, 'R': -1, 'N': 0, 'D': -1, 'C': -1, 'Q': -1, 'E': -1, 'G': -2, 'H': -2, 'I': -1, 'L': -1, 'K': -1,'M': -1, 'F': -2, 'P': -1, 'S': 1, 'T': 5, 'W': -2, 'Y': -2, 'V': 0, },
+        'W': {'A': -3, 'R': -3, 'N': -4, 'D': -4, 'C': -2, 'Q': -2, 'E': -3, 'G': -2, 'H': -2, 'I': -3, 'L': -2,'K': -3, 'M': -1, 'F': 1, 'P': -4, 'S': -3, 'T': -2, 'W': 11, 'Y': 2, 'V': -3, },
+        'Y': {'A': -2, 'R': -2, 'N': -2, 'D': -3, 'C': -2, 'Q': -1, 'E': -2, 'G': -3, 'H': 2, 'I': -1, 'L': -1,'K': -2, 'M': -1, 'F': 3, 'P': -3, 'S': -2, 'T': -2, 'W': 2, 'Y': 7, 'V': -1, },
+        'V': {'A': 0, 'R': -3, 'N': -3, 'D': -3, 'C': -1, 'Q': -2, 'E': -2, 'G': -3, 'H': -3, 'I': 3, 'L': 1, 'K': -2,'M': 1, 'F': -1, 'P': -2, 'S': -2, 'T': 0, 'W': -3, 'Y': -1, 'V': 4, } }
+    seq1 = 'gcctggactccacatccgtcctggactgttgagcgcgcagaccagaggcggttgaggaccagtggtgaggaacggccgaggcggcgtctgagcgggtctccggagttcagcatgcgtgagtgtatctctatccacgtggggcaggcaggtgtccagatcggcaatgcctgctgggaactgtactgccttgaacatggcattcagcctgacggtcagatgccaagcgacaaaaccattggcggcggggacgactcattcaacacattcttcagtgagactggagccggcaagcacgtgcccagggcagtgtttgtggacctggagcccactgtggtggatgaggtgcgcacgggaacctaccggcagctttttcacccagagcagctgatcactggaaaggaagatgcagccaataattatgccagaggccactacaccatcggcaaagagattgtcgacctggtcctggatcgaatccgaaagctggccgatctgtgcacgggactgcagggcttcctcatcttccacagctttggaggaggcacagggtctgggtttgcatcgctgctgatggagcggctttcagtggactatggcaagaagtccaagctggagtttgccatctacccagccccccaggtttctacagcggtcgtggagccttacaactccatcctgaccacgcacaccaccctagagcattccgactgtgctttcatggtggataacgaagccatctacgacatctgccggcgcaacctggatattgaacgtcccacatacaccaacctcaatcgtctgattgggcagattgtgtcgtccattacagcctccctgaggtttgatggcgccctgaatgtggacttaacagaattccagaccaacctggtgccataccctcgcatccacttcccactggcaacctacgccccggtcatctcagctgagaaggcataccatgagcagctgtcagtggcagagatcaccaatgcttgcttcgagccagccaatcagatggtcaagtgtgaccctcgccacggcaaatacatggcctgctgcatgttgtaccggggggatgtggttcccaaagatgtcaacgcggctattgcaaccatcaagacaaagcgcaccatccagtttgtagattggtgtccgactggatttaaggtgggtattaactaccagcctcccactgtggtccctgggggagacctggccaaagtgcagcgggccgtgtgcatgctgagcaataccacggccatcgcagaggcctgggcccgcctggaccacaaatttgacctcatgtacgccaagcgagcctttgtgcattggtacgtgggagaaggcatggaggaaggggagttctccgaggcccgggaggacctggcagcgctggagaaggactatgaagaggtgggcgtggattccgtggaagcagaggcagaagaaggggaggagtactgagcgcatgggtctggctggcggccgtccatttatgtcttccccaccattggaaataaaggatatattattaaaatttctagactgaggc'
+    seq2 = 'agtgcgttacttacctcgactcttagcttgtcggggacggtaaccgggacccggtgtctgctcctgtcgccttcgcctcctaatccctagccactatgcgtgagtgcatctccatccacgttggccaggctggtgtccagattggcaatgcctgctgggagctctactgcctggaacacggcatccagcccgatggccagatgccaagtgacaagaccattgggggaggagatgactccttcaacaccttcttcagtgagacgggcgctggcaagcacgtgccccgggctgtgtttgtagacttggaacccacagtcattgatgaagttcgcactggcacctaccgccagctcttccaccctgagcagctcatcacaggcaaggaagatgctgccaataactatgcccgagggcactacaccattggcaaggagatcattgaccttgtgttggaccgaattcgcaagctggctgaccagtgcaccggtcttcagggcttcttggttttccacagctttggtgggggaactggttctgggttcacctccctgctcatggaacgtctctcagttgattatggcaagaagtccaagctggagttctccatttacccagcaccccaggtttccacagctgtagttgagccctacaactccatcctcaccacccacaccaccctggagcactctgattgtgccttcatggtagacaatgaggccatctatgacatctgtcgtagaaacctcgatatcgagcgcccaacctacactaaccttaaccgccttattagccagattgtgtcctccatcactgcttccctgagatttgatggagccctgaatgttgacctgacagaattccagaccaacctggtgccctacccccgcatccacttccctctggccacatatgcccctgtcatctctgctgagaaagcctaccatgaacagctttctgtagcagagatcaccaatgcttgctttgagccagccaaccagatggtgaaatgtgaccctcgccatggtaaatacatggcttgctgcctgttgtaccgtggtgacgtggttcccaaagatgtcaatgctgccattgccaccatcaaaaccaagcgcagcatccagtttgtggattggtgccccactggcttcaaggttggcatcaactaccagcctcccactgtggtgcctggtggagacctggccaaggtacagagagctgtgtgcatgctgagcaacaccacagccattgctgaggcctgggctcgcctggaccacaagtttgacctgatgtatgccaagcgtgcctttgttcactggtacgtgggtgaggggatggaggaaggcgagttttcagaggcccgtgaagatatggctgcccttgagaaggattatgaggaggttggtgtggattctgttgaaggagagggtgaggaagaaggagaggaatactaattatccattccttttggccctgcagcatgtcatgctcccagaatttcagcttcagcttaactgacagacgttaaagctttctggttagattgttttcacttggtgatcatgtcttttccatgtgtacctgtaatatttttccatcatatctcaaagtaaagtcattaacatcaaaa'
+    #file1 = open('C:/Users/spoer/Documents/PhD/INFO/hw4_seqA.txt')
+    #file2 = open('C:/Users/spoer/Documents/PhD/INFO/tubulin_b.txt')
+    #seq1 = file1.readline()
+    #seq1 = file1.readline()
+    #seq2 = file2.readline()
+    #seq2 = file2.readline() 
+    #seq1 = 'atggcctggactccacatccgtccttag'
+    #seq2 = 'agtgcgatgttacttacctcgactcttagcttag'
+    
+    pro1 = translation(seq1)
+    pro2 = translation(seq2)
+        
+    gscore_dna = global_alignment_dna(seq1,seq2)
+    print(gscore_dna)
+    
+    lscore_dna = local_alignment_dna(seq1,seq2)
+    print(lscore_dna)
+    
+    gscore_pro = global_alignment_pro(pro1,pro2,Blosum62)
+    print(gscore_pro)
+    
+    lscore_pro = local_alignment_pro(pro1,pro2,Blosum62)
+    print(lscore_pro)
+    
+    significance_global(pro1,pro2,gscore_pro,Blosum62)
+    significance_local(pro1,pro2,lscore_pro,Blosum62)
+          
+main()

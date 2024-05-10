@@ -1,0 +1,89 @@
+
+
+
+
+def main():
+    f1 = open("sars.txt", 'r')
+    a = f1.readline()
+    print(a)
+    a = a.upper()
+    print(a)
+    dna2aa = {
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y", "TAA": "stop", "TAG": "stop",
+        "TGT": "C", "TGC": "C", "TGA": "stop", "TGG": "W",
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G"}
+    l = len(a)
+    print(l)
+    #virtual translation
+    for i in range(l):
+        c3 = a[i]+a[i+1]+a[i+2]
+        print(c3)
+        if c3 == 'ATG':
+            print(i)
+            break
+
+
+def main():
+    f1 = open("sars.txt", 'r')
+    a = f1.readline()
+    print(a)
+    a = a.upper()
+    print(a)
+    dna2aa = {
+        "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
+        "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
+        "TAT": "Y", "TAC": "Y", "TAA": "stop", "TAG": "stop",
+        "TGT": "C", "TGC": "C", "TGA": "stop", "TGG": "W",
+        "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
+        "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
+        "CGT": "R", "CGC": "R", "CGA": "R", "CGG": "R",
+        "ATT": "I", "ATC": "I", "ATA": "I", "ATG": "M",
+        "ACT": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "AAT": "N", "AAC": "N", "AAA": "K", "AAG": "K",
+        "AGT": "S", "AGC": "S", "AGA": "R", "AGG": "R",
+        "GTT": "V", "GTC": "V", "GTA": "V", "GTG": "V",
+        "GCT": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "GAT": "D", "GAC": "D", "GAA": "E", "GAG": "E",
+        "GGT": "G", "GGC": "G", "GGA": "G", "GGG": "G"}
+    l = len(a)
+    print(l)
+    #virtual translation
+    pro = ''
+    no_pro = 0
+    stop_coden = ['TAA','TAG','TGA']
+    start_pos = 0
+    for j in range(l-3): #for us to locate where all 'ATG' are
+        c3 = a[j]+a[j+1]+a[j+2]
+        if c3 == 'ATG':
+            start_pos = j
+        for i in range(start_pos,l-3,3):
+            c3 = a[i]+a[i+1]+a[i+2]
+            #if c3 == 'TAA' or c3 == 'TAG' or c3 == 'TGA':
+            if c3 in stop_coden:
+                print(c3)
+                break
+            else:
+                pro+= dna2aa[c3]
+        no_pro+=1
+        print(no_pro)
+        print(pro)
+        pro = ''
+
+
+main()
+
+main()

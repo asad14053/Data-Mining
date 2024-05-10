@@ -1,0 +1,51 @@
+import urllib.request
+import re
+def download_pdb(pdb_id):
+    pdbs = [] #('1A6W','1A2B','1A3B')
+    pdbs.append(pdb_id)
+    for pdb_id in pdbs:
+        path = "https://files.rcsb.org/view/"+pdb_id+".pdb"
+        file_path = "./"+pdb_id+".pdb"
+
+        print(path, file_path)
+
+        urllib.request.urlretrieve(path, file_path)
+        print(file_path, ' is downloaded...')
+def main():
+    pdb_id = '1A6W'
+    download_pdb(pdb_id)
+    f1 = open("./1A6W.pdb",'r')
+    inf = f1.readlines()
+    x = []
+    y = []
+    z = []
+    sen1 = []
+    sen2 = []
+    sen3 = []
+    atom = []
+    nof_atom = 0
+    for i in inf:
+        #print(i)
+        a = re.search('(^ATOM\s+\d{1,4}\s\s(\w+))(\s+[A-Z]{3}\s+\w\s+\d+\s{4})([\s\d\.\-]{8})([\s\d\.\-]{8})([\s\d\.\-]{8})(.*$)', i)
+        if a:
+            print(a.group(1),a.group(4),a.group(5),a.group(6))
+            atom.append(a.group(2))
+            x.append(a.group(4))
+            y.append(a.group(5))
+            z.append(a.group(6))
+            sen1.append(a.group(1))
+            sen2.append(a.group(3))
+            sen3.append(a.group(7))
+            nof_atom+=1
+    coor = [x,y,z]
+    print(coor)
+    f2 = open('./1new.pdb', 'w')
+    for i in range(nof_atom):
+        s = sen1[i]+sen2[i]+coor[0][i]+coor[1][i]+coor[2][i]+sen3[i]
+        #f2.write()
+        print(s)
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    main()
+
+# See PyCharm help at https://www.jetbrains.com/help/pycharm/

@@ -1,0 +1,46 @@
+def gc(lcoor):
+    n = float(len(lcoor))
+    v = [0.,0.,0.]
+    for i in range(len(lcoor)):
+        v[0]+= lcoor[0][i]/n
+        v[1]+= lcoor[1][i]/n
+        v[2]+= lcoor[2][i]/n
+    return v
+def rotation(lcoor,m):
+    pi = math.pi
+    a = random.random()*m/180.*pi #around z axis
+    b = random.random()*m/180.*pi #around y axis
+    g = random.random()*m/180.*pi #around x axis
+    r = [[0]*3 for i in range(3)]
+    r[0][0] = math.cos(a) * math.cos(b)
+    r[0][1] = math.cos(a) * math.sin(b) * math.sin(g) - math.sin(a) * math.cos(g)
+    r[0][2] = math.cos(a) * math.sin(b) * math.cos(g) + math.sin(a) * math.sin(g)
+    r[1][0] = math.sin(a) * math.cos(b)
+    r[1][1] = math.sin(a) * math.sin(b) * math.sin(g) + math.cos(a) * math.cos(g)
+    r[1][2] = math.sin(a) * math.sin(b) * math.cos(g) - math.cos(a) * math.sin(g)
+    r[2][0] = math.sin(b) * -1.
+    r[2][1] = math.cos(b) * math.sin(g)
+    r[2][2] = math.cos(b) * math.cos(g)
+
+
+    n = [[0]*len(lcoor[0]) for i in range(3)]
+    o = [[0]*len(lcoor[0]) for i in range(3)]
+    ori = gc(lcoor)
+    for i in range(len(lcoor[0])):
+        print("note1: ",len(lcoor[0]))
+        n[0][i] = lcoor[0][i] - ori[0] #x'
+        n[1][i] = lcoor[1][i] - ori[1] #y'
+        n[2][i] = lcoor[2][i] - ori[2] #z'
+    for i in range(3):
+        for j in range(len(lcoor[0])):
+            o[i][j] = n[i][j]
+    for i in range(len(lcoor[0])):
+        n[0][i] = r[0][0] * o[0][i] + r[0][1] * o[1][i] + r[0][2] * o[2][i]  # x"
+        n[1][i] = r[1][0] * o[0][i] + r[1][1] * o[1][i] + r[1][2] * o[2][i]  # y"
+        n[2][i] = r[2][0] * o[0][i] + r[2][1] * o[1][i] + r[2][2] * o[2][i]  # z"
+
+    for i in range(len(lcoor[0])):
+        lcoor[0][i] = n[0][i] + ori[0]  # x
+        lcoor[1][i] = n[1][i] + ori[1]  # y
+        lcoor[2][i] = n[2][i] + ori[2]  # z
+    return lcoor

@@ -1,0 +1,45 @@
+def gc(coor):
+    n = float(len(coor))
+    v = [0.,0.,0.]
+    for i in range(len(coor)):
+        v[0]+= coor[i][1]/n
+        v[1]+= coor[i][2]/n
+        v[2]+= coor[i][3]/n
+    return v
+def rotation(coor,m):
+    pi = math.pi
+    a = rgen(m)/180.*pi #around z axis
+    b = rgen(m)/180.*pi #around y axis
+    g = rgen(m)/180.*pi #around x axis
+    r = [[0]*3 for i in range(3)]
+    r[0][0] = math.cos(a) * math.cos(b)
+    r[0][1] = math.cos(a) * math.sin(b) * math.sin(g) - math.sin(a) * math.cos(g)
+    r[0][2] = math.cos(a) * math.sin(b) * math.cos(g) + math.sin(a) * math.sin(g)
+    r[1][0] = math.sin(a) * math.cos(b)
+    r[1][1] = math.sin(a) * math.sin(b) * math.sin(g) + math.cos(a) * math.cos(g)
+    r[1][2] = math.sin(a) * math.sin(b) * math.cos(g) - math.cos(a) * math.sin(g)
+    r[2][0] = math.sin(b) * -1.
+    r[2][1] = math.cos(b) * math.sin(g)
+    r[2][2] = math.cos(b) * math.cos(g)
+
+
+    n = [[0]*3 for i in range(len(coor))]
+    o = [[0]*3 for i in range(len(coor))]
+    ori = gc(coor)
+    for i in range(len(coor)):
+        n[i][0] = coor[i][1] - ori[0] #x'
+        n[i][1] = coor[i][2] - ori[1] #y'
+        n[i][2] = coor[i][3] - ori[2] #z'
+    for i in range(len(coor)):
+        for j in range(3):
+            o[i][j] = n[i][j]
+    for i in range(len(coor)):
+        n[i][0] = r[0][0] * o[i][0] + r[0][1] * o[i][1] + r[0][2] * o[i][2]  # x"
+        n[i][1] = r[1][0] * o[i][0] + r[1][1] * o[i][1] + r[1][2] * o[i][2]  # y"
+        n[i][2] = r[2][0] * o[i][0] + r[2][1] * o[i][1] + r[2][2] * o[i][2]  # z"
+
+    for i in range(len(coor)):
+        coor[i][1] = n[i][0] + ori[0]  # x
+        coor[i][2] = n[i][1] + ori[1]  # y
+        coor[i][3] = n[i][2] + ori[2]  # z
+    return coor

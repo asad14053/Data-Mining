@@ -1,0 +1,47 @@
+def calculate_distance(x,y,z,m,n,o):
+    #for w1 in range(10):
+    w1 = 1
+    w2 = 1
+    w3 = 1
+    d = (w1*(x-m)**2+w2*(y-n)**2+w3*(z-o)**2)**0.5
+    return d
+def hierachy(name,h,b,a):
+    n = len(name)
+    w = [1]*n
+    for i in range(n-1):
+        shortest = 1000
+        p1 = 0
+        p2 = 0
+        for j in range(n-i):
+            for k in range(j):
+                dist = calculate_distance(h[j],b[j],a[j],h[k],b[k],a[k])
+                if dist < shortest:
+                    shortest = dist
+                    p1 = k
+                    p2 = j
+        print('note 1: ',shortest, p1, p2,name[p1],name[p2])
+        name[p1] = name[p1]+':'+name[p2]
+        h[p1] = (h[p1]*w[p1]+h[p2]*w[p2])/(w[p1]+w[p2])
+        b[p1] = (b[p1]*w[p1]+b[p2]*w[p2])/(w[p1]+w[p2])
+        a[p1] = (a[p1]*w[p1]+a[p2]*w[p2])/(w[p1]+w[p2])
+        w[p1] = w[p1]+w[p2]
+        del name[p2]
+        del h[p2]
+        del b[p2]
+        del a[p2]
+        del w[p2]
+        print(name)
+        print(h)
+        print(b)
+        print(a)
+        print(w)
+        xxx = input()
+def main():
+    name = ['Paul','Denis','Hayat','Ja-kyung','Jaemin','Jongwha','Keith','Asad','Oscar','Ravi','Xinyu','Yuechen']
+    h = [70,72,63,64,72,69,68,80,67,73,63,72] #height
+    bw = [175,181,132,120,210,143,190,124,155,181,128,185] #weight
+    age = [45,40,40,29,28,27,29,26,27,28,26,24]
+    #w = [1]*len(name)
+    hierachy(name,h,bw,age)
+
+main()

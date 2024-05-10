@@ -1,0 +1,181 @@
+#INFO 8750
+import urllib.request
+import re
+import random
+import math
+def distance(a,b,c,x,y,z):
+    d = ((a-x)**2+(b-y)**2+(c-z)**2)**0.5
+    return d
+def go_like(rcoor, lcoor):
+    n = len(lcoor[0])
+    score = 0
+    for i in range(n):
+        score+= 1/(distance(rcoor[0][i],rcoor[1][i],rcoor[2][i],lcoor[0][i],lcoor[1][i],lcoor[2][i]))
+    return score
+def gc(lcoor):
+    n = float(len(lcoor))
+    v = [0.,0.,0.]
+    for i in range(len(lcoor)):
+        v[0]+= lcoor[0][i]/n
+        v[1]+= lcoor[1][i]/n
+        v[2]+= lcoor[2][i]/n
+    return v
+def rotation(lcoor,m):
+    pi = math.pi
+    a = (random.random()*2*m-m)/180.*pi #around z axis
+    b = (random.random()*2*m-m)/180.*pi #around y axis
+    g = (random.random()*2*m-m)/180.*pi #around x axis
+    r = [[0]*3 for i in range(3)]
+    r[0][0] = math.cos(a) * math.cos(b)
+    r[0][1] = math.cos(a) * math.sin(b) * math.sin(g) - math.sin(a) * math.cos(g)
+    r[0][2] = math.cos(a) * math.sin(b) * math.cos(g) + math.sin(a) * math.sin(g)
+    r[1][0] = math.sin(a) * math.cos(b)
+    r[1][1] = math.sin(a) * math.sin(b) * math.sin(g) + math.cos(a) * math.cos(g)
+    r[1][2] = math.sin(a) * math.sin(b) * math.cos(g) - math.cos(a) * math.sin(g)
+    r[2][0] = math.sin(b) * -1.
+    r[2][1] = math.cos(b) * math.sin(g)
+    r[2][2] = math.cos(b) * math.cos(g)
+
+
+    n = [[0]*len(lcoor[0]) for i in range(3)]
+    o = [[0]*len(lcoor[0]) for i in range(3)]
+    ori = gc(lcoor)
+    for i in range(len(lcoor[0])):
+        #print("note1: ",len(lcoor[0]))
+        n[0][i] = lcoor[0][i] - ori[0] #x'
+        n[1][i] = lcoor[1][i] - ori[1] #y'
+        n[2][i] = lcoor[2][i] - ori[2] #z'
+    for i in range(3):
+        for j in range(len(lcoor[0])):
+            o[i][j] = n[i][j]
+    for i in range(len(lcoor[0])):
+        n[0][i] = r[0][0] * o[0][i] + r[0][1] * o[1][i] + r[0][2] * o[2][i]  # x"
+        n[1][i] = r[1][0] * o[0][i] + r[1][1] * o[1][i] + r[1][2] * o[2][i]  # y"
+        n[2][i] = r[2][0] * o[0][i] + r[2][1] * o[1][i] + r[2][2] * o[2][i]  # z"
+
+    for i in range(len(lcoor[0])):
+        lcoor[0][i] = n[0][i] + ori[0]  # x
+        lcoor[1][i] = n[1][i] + ori[1]  # y
+        lcoor[2][i] = n[2][i] + ori[2]  # z
+    #return lcoor
+def translation(lcoor,m):
+    dx = 2 * m * random.random() - m
+    dy = 2 * m * random.random() - m
+    dz = 2 * m * random.random() - m
+    print(dx, dy, dz)
+    for i in range(len(lcoor[0])):
+        lcoor[0][i] += dx
+        lcoor[1][i] += dy
+        lcoor[2][i] += dz
+    #return lcoor
+def download_pdb(pdb_id):
+    pdbs = [] #('1A6W','1A2B','1A3B')
+    pdbs.append(pdb_id)
+    for pdb_id in pdbs:
+        path = "https://files.rcsb.org/view/"+pdb_id+".pdb"
+        file_path = "C://INFO6750//"+pdb_id+".pdb"
+
+        print(path, file_path)
+
+        urllib.request.urlretrieve(path, file_path)
+        print(file_path, ' is downloaded...')
+def main():
+    pdb_id = '1A6W'
+    download_pdb(pdb_id)
+    f1 = open("C://INFO6750//1A6W.pdb",'r')
+    inf = f1.readlines()
+    x = []
+    y = []
+    z = []
+    lx = []
+    ly = []
+    lz = []
+    sen1 = []
+    sen2 = []
+    sen3 = []
+    atom = []
+    hatom = []
+    lsen1 = []
+    lsen2 = []
+    lsen3 = []
+    nof_atom = 0
+    nof_het = 0
+    for i in inf:
+        #print(i)
+        a = re.search('(^ATOM\s+\d{1,4}\s\s(\w+))(\s+[A-Z]{3}\s+\w\s+\d+\s{4})([\s\d\.\-]{8})([\s\d\.\-]{8})([\s\d\.\-]{8})(.*$)', i)
+        b = re.search('(^HETATM\s+\d{1,4}\s\s(\w+))(\s+[A-Z]{3}\s+\w\s+\d+\s{4})([\s\d\.\-]{8})([\s\d\.\-]{8})([\s\d\.\-]{8})(.*$)',i)
+        if a:
+            #print(a.group(1),a.group(4),a.group(5),a.group(6))
+            atom.append(a.group(2))
+            #x.append(float(a.group(4)))
+            x.append(float(i[30:38]))
+            y.append(float(i[38:46]))
+            z.append(float(i[46:54]))
+            #print(i[30:38])
+            #y.append(float(a.group(5)))
+            #z.append(float(a.group(6)))
+            sen1.append(a.group(1))
+            sen2.append(a.group(3))
+            sen3.append(a.group(7))
+            nof_atom+=1
+        if b:
+            c = re.search('HOH',i)
+            if c:
+                continue
+            #print(a.group(1),a.group(4),a.group(5),a.group(6))
+            hatom.append(b.group(2))
+            lx.append(float(i[30:38]))#lx.append(float(b.group(4)))
+            ly.append(float(i[38:46]))#ly.append(float(b.group(5)))
+            lz.append(float(i[46:54]))#lz.append(float(b.group(6)))
+            lsen1.append(b.group(1))
+            lsen2.append(b.group(3))
+            lsen3.append(b.group(7))
+            nof_het+=1
+    coor = [x,y,z]
+    lcoor = [[0]*nof_het for i in range(3)]
+    current = [[0]*nof_het for i in range(3)]
+    for i in range(nof_het):
+        lcoor[0][i] = lx[i]
+        lcoor[1][i] = ly[i]
+        lcoor[2][i] = lz[i]
+        current[0][i] = lx[i]
+        current[1][i] = ly[i]
+        current[2][i] = lz[i]
+    #lcoor = [lx,ly,lz]
+    #current = [lx,ly,lz] #ligand's current position
+    #print(coor)
+    print(nof_atom)
+    #input()
+    f2 = open('C://INFO6750//1new.pdb', 'w')
+    #for i in range(nof_atom):
+    #    s = sen1[i]+sen2[i]+str(coor[0][i])+str(coor[1][i])+str(coor[2][i])+sen3[i]+'\n'
+    #    f2.write("%s%s%8.3f%8.3f%8.3f%s\n" %(sen1[i],sen2[i],coor[0][i],coor[1][i],coor[2][i],sen3[i]))
+    #f2.write('TER\n')
+    for i in range(nof_atom):
+        f2.write("%s%s%8.3f%8.3f%8.3f%s\n" % (sen1[i], sen2[i], coor[0][i], coor[1][i], coor[2][i], sen3[i]))
+    f2.write('TER\n')
+    for i in range(nof_het):
+        #s = sen1[i] + sen2[i] + str(coor[0][i]) + str(coor[1][i]) + str(coor[2][i]) + sen3[i] + '\n'
+        f2.write("%s%s%8.3f%8.3f%8.3f%s\n" % (lsen1[i], lsen2[i], lcoor[0][i], lcoor[1][i], lcoor[2][i], lsen3[i]))
+    f2.write('TER\n')
+    f2.write('END\n')
+    translation(current,30)
+    pre_score = -1000
+    old_pos = [[0]*nof_het for i in range(3)]
+    for j in range(100): #100 steps
+        #translation
+        #store_replace(old_pos, current, nof_het)
+        translation(current,3)
+        rotation(current,60)
+        print('The score for the current postion = ',go_like(lcoor,current))
+        for i in range(nof_atom):
+            f2.write("%s%s%8.3f%8.3f%8.3f%s\n" % (sen1[i], sen2[i], coor[0][i], coor[1][i], coor[2][i], sen3[i]))
+        f2.write('TER\n')
+        for i in range(nof_het):
+            #s = sen1[i] + sen2[i] + str(coor[0][i]) + str(coor[1][i]) + str(coor[2][i]) + sen3[i] + '\n'
+            f2.write("%s%s%8.3f%8.3f%8.3f%s\n" % (lsen1[i], lsen2[i], current[0][i], current[1][i], current[2][i], lsen3[i]))
+        f2.write('TER\n')
+        f2.write('END\n')
+
+if __name__ == '__main__':
+    main()

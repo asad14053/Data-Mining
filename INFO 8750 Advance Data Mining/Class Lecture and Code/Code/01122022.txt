@@ -1,0 +1,59 @@
+
+def main(name):
+    a = 1
+    b = "This is a book"
+    c = 3.14
+    print(a)
+    print(b)
+    print(c)
+    a = 2
+    print(a)
+    a = a+1
+    print(a,b)
+    b = b+' no. '
+    a += 2
+    print(a) #a == 5
+    e = 41//3
+    f = 41%3
+    g = 3**2
+    print(e,f,g)
+    b = b + str(a)
+    print(b)
+    d = True
+    print(d)
+    h = not d
+    print(h)
+    print (e,f)
+    k = e != f
+    print(k)
+
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    main('PyCharm')
+
+
+
+def main(name):
+    g = 9.8
+    t = float(input('How many seconds? '))
+    h = 0.5*g*t**2
+    print('This object fell down ',h,' meters.')
+
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    main('PyCharm')
+
+from math import sqrt
+
+def main(name):
+    s1 = float(input('please input side 1 '))
+    s2 = float(input('please input side 2 '))
+    h = sqrt(s1**2+s2**2)
+    print("the \"h\" would be ",h)
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    main('PyCharm')
+

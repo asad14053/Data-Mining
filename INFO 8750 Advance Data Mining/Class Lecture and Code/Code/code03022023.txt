@@ -1,0 +1,381 @@
+
+# This is a sample Python script.
+Blosum62 = {
+        'A': {'A': 4, 'R': -1, 'N': -2, 'D': -2, 'C': 0, 'Q': -1, 'E': -1, 'G': 0, 'H': -2, 'I': -1, 'L': -1, 'K': -1,
+              'M': -1, 'F': -2, 'P': -1, 'S': 1, 'T': 0, 'W': -3, 'Y': -2, 'V': 0, },
+        'R': {'A': -1, 'R': 5, 'N': 0, 'D': -2, 'C': -3, 'Q': 1, 'E': 0, 'G': -2, 'H': 0, 'I': -3, 'L': -3, 'K': 2,
+              'M': -1, 'F': -3, 'P': -2, 'S': -1, 'T': -1, 'W': -3, 'Y': -2, 'V': -3, },
+        'N': {'A': -2, 'R': 0, 'N': 6, 'D': 1, 'C': -3, 'Q': 0, 'E': 0, 'G': 0, 'H': 1, 'I': -3, 'L': -3, 'K': 0,
+              'M': -2, 'F': -3, 'P': -2, 'S': 1, 'T': 0, 'W': -4, 'Y': -2, 'V': -3, },
+        'D': {'A': -2, 'R': -2, 'N': 1, 'D': 6, 'C': -3, 'Q': 0, 'E': 2, 'G': -1, 'H': -1, 'I': -3, 'L': -4, 'K': -1,
+              'M': -3, 'F': -3, 'P': -1, 'S': 0, 'T': -1, 'W': -4, 'Y': -3, 'V': -3, },
+        'C': {'A': 0, 'R': -3, 'N': -3, 'D': -3, 'C': 9, 'Q': -3, 'E': -4, 'G': -3, 'H': -3, 'I': -1, 'L': -1, 'K': -3,
+              'M': -1, 'F': -2, 'P': -3, 'S': -1, 'T': -1, 'W': -2, 'Y': -2, 'V': -1, },
+        'Q': {'A': -1, 'R': 1, 'N': 0, 'D': 0, 'C': -3, 'Q': 5, 'E': 2, 'G': -2, 'H': 0, 'I': -3, 'L': -2, 'K': 1,
+              'M': 0, 'F': -3, 'P': -1, 'S': 0, 'T': -1, 'W': -2, 'Y': -1, 'V': -2, },
+        'E': {'A': -1, 'R': 0, 'N': 0, 'D': 2, 'C': -4, 'Q': 2, 'E': 5, 'G': -2, 'H': 0, 'I': -3, 'L': -3, 'K': 1,
+              'M': -2, 'F': -3, 'P': -1, 'S': 0, 'T': -1, 'W': -3, 'Y': -2, 'V': -2, },
+        'G': {'A': 0, 'R': -2, 'N': 0, 'D': -1, 'C': -3, 'Q': -2, 'E': -2, 'G': 6, 'H': -2, 'I': -4, 'L': -4, 'K': -2,
+              'M': -3, 'F': -3, 'P': -2, 'S': 0, 'T': -2, 'W': -2, 'Y': -3, 'V': -3, },
+        'H': {'A': -2, 'R': 0, 'N': 1, 'D': -1, 'C': -3, 'Q': 0, 'E': 0, 'G': -2, 'H': 8, 'I': -3, 'L': -3, 'K': -1,
+              'M': -2, 'F': -1, 'P': -2, 'S': -1, 'T': -2, 'W': -2, 'Y': 2, 'V': -3, },
+        'I': {'A': -1, 'R': -3, 'N': -3, 'D': -3, 'C': -1, 'Q': -3, 'E': -3, 'G': -4, 'H': -3, 'I': 4, 'L': 2, 'K': -3,
+              'M': 1, 'F': 0, 'P': -3, 'S': -2, 'T': -1, 'W': -3, 'Y': -1, 'V': 3, },
+        'L': {'A': -1, 'R': -2, 'N': -3, 'D': -4, 'C': -1, 'Q': -2, 'E': -3, 'G': -4, 'H': -3, 'I': 2, 'L': 4, 'K': -2,
+              'M': 2, 'F': 0, 'P': -3, 'S': -2, 'T': -1, 'W': -2, 'Y': -1, 'V': 1, },
+        'K': {'A': -1, 'R': 2, 'N': 0, 'D': -1, 'C': -3, 'Q': 1, 'E': 1, 'G': -2, 'H': -1, 'I': -3, 'L': -2, 'K': 5,
+              'M': -1, 'F': -3, 'P': -1, 'S': 0, 'T': -1, 'W': -3, 'Y': -2, 'V': -2, },
+        'M': {'A': -1, 'R': -1, 'N': -2, 'D': -3, 'C': -1, 'Q': 0, 'E': -2, 'G': -3, 'H': -2, 'I': 1, 'L': 2, 'K': -1,
+              'M': 5, 'F': 0, 'P': -2, 'S': -1, 'T': -1, 'W': -1, 'Y': -1, 'V': 1, },
+        'F': {'A': -2, 'R': -3, 'N': -3, 'D': -3, 'C': -2, 'Q': -3, 'E': -3, 'G': -3, 'H': -1, 'I': 0, 'L': 0, 'K': -3,
+              'M': 0, 'F': 6, 'P': -4, 'S': -2, 'T': -2, 'W': 1, 'Y': 3, 'V': -1, },
+        'P': {'A': -1, 'R': -2, 'N': -2, 'D': -1, 'C': -3, 'Q': -1, 'E': -1, 'G': -2, 'H': -2, 'I': -3, 'L': -3,
+              'K': -1, 'M': -2, 'F': -4, 'P': 7, 'S': -1, 'T': -1, 'W': -4, 'Y': -3, 'V': -2, },
+        'S': {'A': 1, 'R': -1, 'N': 1, 'D': 0, 'C': -1, 'Q': 0, 'E': 0, 'G': 0, 'H': -1, 'I': -2, 'L': -2, 'K': 0,
+              'M': -1, 'F': -2, 'P': -1, 'S': 4, 'T': 1, 'W': -3, 'Y': -2, 'V': -2, },
+        'T': {'A': 0, 'R': -1, 'N': 0, 'D': -1, 'C': -1, 'Q': -1, 'E': -1, 'G': -2, 'H': -2, 'I': -1, 'L': -1, 'K': -1,
+              'M': -1, 'F': -2, 'P': -1, 'S': 1, 'T': 5, 'W': -2, 'Y': -2, 'V': 0, },
+        'W': {'A': -3, 'R': -3, 'N': -4, 'D': -4, 'C': -2, 'Q': -2, 'E': -3, 'G': -2, 'H': -2, 'I': -3, 'L': -2,
+              'K': -3, 'M': -1, 'F': 1, 'P': -4, 'S': -3, 'T': -2, 'W': 11, 'Y': 2, 'V': -3, },
+        'Y': {'A': -2, 'R': -2, 'N': -2, 'D': -3, 'C': -2, 'Q': -1, 'E': -2, 'G': -3, 'H': 2, 'I': -1, 'L': -1,
+              'K': -2, 'M': -1, 'F': 3, 'P': -3, 'S': -2, 'T': -2, 'W': 2, 'Y': 7, 'V': -1, },
+        'V': {'A': 0, 'R': -3, 'N': -3, 'D': -3, 'C': -1, 'Q': -2, 'E': -2, 'G': -3, 'H': -3, 'I': 3, 'L': 1, 'K': -2,
+              'M': 1, 'F': -1, 'P': -2, 'S': -2, 'T': 0, 'W': -3, 'Y': -1, 'V': 4, },
+        }
+
+def show_score(seq1, seq2, a,b,l): #nof row, nof column, list
+    for i in range(a):
+        if i < 1:  # i == 0
+            print('     ',end="")
+            for j in range(b-1):
+                print("  ",seq1[j],end="")
+            print()
+        if i < 1:
+            print(' ',end="")
+        else:
+            print(seq2[i-1],end="")
+        for j in range(b):
+            if l[i][j] < 0 or l[i][j] > 9:
+                print(" ",l[i][j],end="")
+            else:
+                print("  ",l[i][j],end="")
+        print()
+def show_direction(seq1, seq2, a,b,l): #nof row, nof column, list
+    for i in range(a):
+        if i < 1:  # i == 0
+            print('     ',end="")
+            for j in range(b-1):
+                print("  ",seq1[j],end="")
+            print()
+        if i < 1:
+            print(' ',end="")
+        else:
+            print(seq2[i-1],end="")
+        for j in range(b):
+                print("  ",l[i][j],end="")
+        print()
+def protein_local_alignment(seq1, seq2):
+    gap = -2 #gap penalty
+
+    #a = input('have a pause!') #
+    l1 = len(seq1)+1
+    l2 = len(seq2)+1
+    score = [[0]*l1 for i in range(l2)]
+    dir = [['X']*l1 for i in range(l2)]
+    max_score = -1
+    x = l1 - 1
+    y = l2 - 1
+    for i in range(l2):
+        if i == 0:
+            for j in range(1,l1):
+                score[0][j] = 0 #score[0][j-1]+gap
+                dir[0][j] = 'L'
+        else:
+            for j in range(l1):
+                if j == 0:
+                    score[i][0] = 0 #score[i-1][0]+gap
+                    dir[i][0] = 'T'
+                else:
+                    dig = score[i-1][j-1]+Blosum62[seq1[j-1]][seq2[i-1]]
+                    top = score[i-1][j] + gap
+                    left = score[i][j-1]+gap
+                    score[i][j] = max(dig,top,left,0)
+                    if score[i][j] >= max_score:
+                        max_score = score[i][j]
+                        x = j
+                        y = i
+                    if score[i][j] == dig:
+                        dir[i][j] = 'D'
+                    elif score[i][j] == top:
+                        dir[i][j] = 'T'
+                    elif score[i][j] == left:
+                        dir[i][j] = 'L'
+
+    #show_score(seq1, seq2, l2, l1, score)
+    #show_direction(seq1,seq2,l2,l1,dir)
+
+    final_score = score[y][x]
+    align1 = ''
+    align2 = ''
+    align3 = ''
+    while(score[y][x]>0):
+        if dir[y][x] == 'D':
+            align1 = seq1[x-1]+align1
+            align3 = seq2[y-1]+align3
+            if seq1[x-1] == seq2[y-1]:
+                align2 = '|'+align2
+            elif Blosum62[seq1[x-1]][seq2[y-1]] >= 0:
+                align2 = ':'+align2
+            else:
+                align2 = ' '+align2
+            x-=1
+            y-=1
+        elif dir[y][x] == 'T':
+            align1 = '-'+align1
+            align3 = seq2[y-1]+align3
+            align2 = ' '+align2
+            y-=1
+        elif dir[y][x] == 'L':
+            align1 = seq1[x-1]+align1
+            align3 = '-'+align3
+            align2 = ' '+align2
+            x-=1
+    print(align1)
+    print(align2)
+    print(align3)
+    print(max_score)
+    return max_score
+def local_alignment(seq1, seq2):
+    match = 3
+    gap = -2 #gap penalty
+    mismatch = -3
+
+    #a = input('have a pause!') #
+    l1 = len(seq1)+1
+    l2 = len(seq2)+1
+    score = [[0]*l1 for i in range(l2)]
+    dir = [['X']*l1 for i in range(l2)]
+    max_score = -1
+    x = l1 - 1
+    y = l2 - 1
+    for i in range(l2):
+        if i == 0:
+            for j in range(1,l1):
+                score[0][j] = 0 #score[0][j-1]+gap
+                dir[0][j] = 'L'
+        else:
+            for j in range(l1):
+                if j == 0:
+                    score[i][0] = 0 #score[i-1][0]+gap
+                    dir[i][0] = 'T'
+                else:
+                    if seq1[j-1] == seq2[i-1]: # match
+                        dig = score[i-1][j-1]+match
+                    else:
+                        dig = score[i-1][j-1]+mismatch
+                    top = score[i-1][j] + gap
+                    left = score[i][j-1]+gap
+                    score[i][j] = max(dig,top,left,0)
+                    if score[i][j] >= max_score:
+                        max_score = score[i][j]
+                        x = j
+                        y = i
+                    if score[i][j] == dig:
+                        dir[i][j] = 'D'
+                    elif score[i][j] == top:
+                        dir[i][j] = 'T'
+                    elif score[i][j] == left:
+                        dir[i][j] = 'L'
+
+    #show_score(seq1, seq2, l2, l1, score)
+    #show_direction(seq1,seq2,l2,l1,dir)
+
+    final_score = score[y][x]
+    align1 = ''
+    align2 = ''
+    align3 = ''
+    while(score[y][x]>0):
+        if dir[y][x] == 'D':
+            align1 = seq1[x-1]+align1
+            align3 = seq2[y-1]+align3
+            if seq1[x-1] == seq2[y-1]:
+                align2 = '|'+align2
+            else:
+                align2 = ' '+align2
+            x-=1
+            y-=1
+        elif dir[y][x] == 'T':
+            align1 = '-'+align1
+            align3 = seq2[y-1]+align3
+            align2 = ' '+align2
+            y-=1
+        elif dir[y][x] == 'L':
+            align1 = seq1[x-1]+align1
+            align3 = '-'+align3
+            align2 = ' '+align2
+            x-=1
+    print(align1)
+    print(align2)
+    print(align3)
+    print(max_score)
+    return max_score
+def protein_global_alignment(seq1, seq2):
+    gap = -1 #gap penalty
+
+    #a = input('have a pause!') #
+    l1 = len(seq1)+1
+    l2 = len(seq2)+1
+    score = [[0]*l1 for i in range(l2)]
+    dir = [['X']*l1 for i in range(l2)]
+    for i in range(l2):
+        if i == 0:
+            for j in range(1,l1):
+                score[0][j] = score[0][j-1]+gap
+                dir[0][j] = 'L'
+        else:
+            for j in range(l1):
+                if j == 0:
+                    score[i][0] = score[i-1][0]+gap
+                    dir[i][0] = 'T'
+                else:
+                    dig = score[i-1][j-1]+Blosum62[seq1[j-1]][seq2[i-1]]
+                    top = score[i-1][j] + gap
+                    left = score[i][j-1]+gap
+                    score[i][j] = max(dig,top,left)
+                    if score[i][j] == dig:
+                        dir[i][j] = 'D'
+                    elif score[i][j] == top:
+                        dir[i][j] = 'T'
+                    elif score[i][j] == left:
+                        dir[i][j] = 'L'
+
+    #show_score(seq1, seq2, l2, l1, score)
+    #show_direction(seq1,seq2,l2,l1,dir)
+    x = l1-1
+    y = l2-1
+    final_score = score[y][x]
+    align1 = ''
+    align2 = ''
+    align3 = ''
+    while(x>0 or y>0):
+        if dir[y][x] == 'D':
+            align1 = seq1[x-1]+align1
+            align3 = seq2[y-1]+align3
+            if seq1[x-1] == seq2[y-1]:
+                align2 = '|'+align2
+            elif Blosum62[seq1[x-1]][seq2[y-1]] >= 0:
+                align2 = ':'+align2
+            else:
+                align2 = ' '+align2
+            x-=1
+            y-=1
+        elif dir[y][x] == 'T':
+            align1 = '-'+align1
+            align3 = seq2[y-1]+align3
+            align2 = ' '+align2
+            y-=1
+        elif dir[y][x] == 'L':
+            align1 = seq1[x-1]+align1
+            align3 = '-'+align3
+            align2 = ' '+align2
+            x-=1
+    print(align1)
+    print(align2)
+    print(align3)
+    print(final_score)
+    return final_score
+def global_alignment(seq1, seq2):
+    match = 1
+    gap = -1 #gap penalty
+    mismatch = -1
+
+    #a = input('have a pause!') #
+    l1 = len(seq1)+1
+    l2 = len(seq2)+1
+    score = [[0]*l1 for i in range(l2)]
+    dir = [['X']*l1 for i in range(l2)]
+    for i in range(l2):
+        if i == 0:
+            for j in range(1,l1):
+                score[0][j] = score[0][j-1]+gap
+                dir[0][j] = 'L'
+        else:
+            for j in range(l1):
+                if j == 0:
+                    score[i][0] = score[i-1][0]+gap
+                    dir[i][0] = 'T'
+                else:
+                    if seq1[j-1] == seq2[i-1]: # match
+                        dig = score[i-1][j-1]+match
+                    else:
+                        dig = score[i-1][j-1]+mismatch
+                    top = score[i-1][j] + gap
+                    left = score[i][j-1]+gap
+                    score[i][j] = max(dig,top,left)
+                    if score[i][j] == dig:
+                        dir[i][j] = 'D'
+                    elif score[i][j] == top:
+                        dir[i][j] = 'T'
+                    elif score[i][j] == left:
+                        dir[i][j] = 'L'
+
+    #show_score(seq1, seq2, l2, l1, score)
+    #show_direction(seq1,seq2,l2,l1,dir)
+    x = l1-1
+    y = l2-1
+    final_score = score[y][x]
+    align1 = ''
+    align2 = ''
+    align3 = ''
+    while(x>0 or y>0):
+        if dir[y][x] == 'D':
+            align1 = seq1[x-1]+align1
+            align3 = seq2[y-1]+align3
+            if seq1[x-1] == seq2[y-1]:
+                align2 = '|'+align2
+            else:
+                align2 = ' '+align2
+            x-=1
+            y-=1
+        elif dir[y][x] == 'T':
+            align1 = '-'+align1
+            align3 = seq2[y-1]+align3
+            align2 = ' '+align2
+            y-=1
+        elif dir[y][x] == 'L':
+            align1 = seq1[x-1]+align1
+            align3 = '-'+align3
+            align2 = ' '+align2
+            x-=1
+    print(align1)
+    print(align2)
+    print(align3)
+    print(final_score)
+    return final_score
+def main():
+    #seq1 = 'GCATGCT'
+    #seq2 = 'GATTACA'
+    seq1 = 'TGTTACGG'
+    seq2 = 'GGTTGACTA'
+    #seq1 = 'MRECISIHVGQ'
+    #seq2 = 'MREIVHIQAG'
+    #f1 = open('./ta.txt', 'r')
+    #seq1 = f1.readline()
+    #f1.close()
+    #f2 = open('./tb.txt', 'r')
+    #seq2 = f2.readline()
+    #f2.close()
+    print(seq1)
+    print(seq2)
+    print('blosum score:',Blosum62[seq1[0]][seq2[0]])
+    gscore = global_alignment(seq1,seq2)
+    print('score of the global alignment:', gscore)
+    gscore = protein_global_alignment(seq1,seq2)
+    print('score of the global alignment (protein):', gscore)
+    lscore = local_alignment(seq1,seq2)
+    print('score of the local alignment: ', lscore)
+    lscore = protein_local_alignment(seq1,seq2)
+    print('score of the local alignment (protein): ', lscore)
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    main()

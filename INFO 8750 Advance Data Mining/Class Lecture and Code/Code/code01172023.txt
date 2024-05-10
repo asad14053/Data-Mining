@@ -1,0 +1,59 @@
+def main(name):
+    if (3>2):
+        print("It's true")
+        print("And we have cool whether today.")
+    else:
+        print("it's not true.")
+
+
+def main(): 
+    age = int(input("How old are you?"))
+    if (age < 16):
+        print("you cannot drive!")
+    elif (age < 21):
+        print("you cannot drink!")
+    else:
+        print("you can drink and drive.")
+def main():
+    a = 20
+    while(a>=0):
+        print(a,'!')
+        a-=1
+    print("Happy New Year!")
+
+def main():
+    n = int(input("please input an integer: "))
+    fac = 1
+    while(n>1):
+        fac*= n
+        n-=1
+    print(fac)
+
+def main():
+    for x in range(2,101,2):
+        print(x)
+
+def main():
+    for x in range(20,-1,-1):
+        print(x)
+    print("Happy New Year!")
+
+def main():
+    n = int(input("please input an integer: "))
+    fac = 1
+    for i in range(2,n+1):
+        fac*=i
+    print(fac)
+
+def main():
+    n = int(input("which item of fibonacci you want? (n >=3) "))
+    f1 = 1
+    f2 = 1
+    for i in range(3,n+1):
+        fn = f1+f2
+        f1 = f2
+        f2 = fn
+    print("The ",n,"th item of fibonacci = ", fn)
+
+
+

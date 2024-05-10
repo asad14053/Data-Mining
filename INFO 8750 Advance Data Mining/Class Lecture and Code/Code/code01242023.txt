@@ -1,0 +1,84 @@
+
+import random
+def main():
+    ans = random.randint(1,100)
+    guess = -1
+    while(ans != guess):
+        guess = int(input("please enter your guess: "))
+        if guess > ans:
+            print("go down!")
+        elif guess < ans:
+            print("go up!")
+        else:
+            print("Correct!")
+
+def main():
+    ans = random.randint(1,100)
+    guess = -1
+    upper = 99
+    lower = 1
+    while(ans != guess):
+        print(lower,"~",upper)
+        guess = int(input("please enter your guess: "))
+        if guess > ans:
+            upper = guess
+        elif guess < ans:
+            lower = guess
+        else:
+            print("Correct!")
+
+
+import random
+def main():
+    rabbit = 0
+    turtle = 0
+    finish_line = 50
+    while (rabbit <= finish_line and turtle <= finish_line):
+        turtle+= random.randint(1,6)
+        rabbit+= random.randint(1,6)
+        for i in range(1,1+max(finish_line,turtle)):
+            #print(i,end="")
+            if i == turtle:
+                print("T",end="")
+            elif i == finish_line:
+                print("|",end="")
+            elif i < turtle:
+                print(".",end="")
+            elif i > turtle:
+                print(" ",end="")
+        print()
+        for i in range(1,1+max(finish_line,rabbit)):
+            #print(i,end="")
+            if i == rabbit:
+                print("R",end="")
+            elif i == finish_line:
+                print("|",end="")
+            elif i < rabbit:
+                print(".",end="")
+            elif i > rabbit:
+                print(" ",end="")
+        print()
+    if (rabbit > turtle):
+        print("rabbit won!")
+    elif (rabbit < turtel):
+        print("turtle won!")
+    else:
+        print('tie!'
+
+import random
+import string
+def main():
+    message = input("Please input your message: ")
+    l = len(message)
+    secret_key = 7
+    secret = ''
+    for i in range(l*10):
+        if i % 10 == secret_key:
+            secret+=message[i//10]
+        else:
+            secret+=random.choice('abcdefghijklmnopqrstuvwxyz')
+    print(secret)
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    main()

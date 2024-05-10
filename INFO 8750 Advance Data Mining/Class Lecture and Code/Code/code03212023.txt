@@ -1,0 +1,54 @@
+
+import re
+def main():
+    f1 = open('./IOB.txt','r',errors = 'ignore')
+    l = f1.readlines()
+    #print(l)
+    phone={} #phone =[]
+    email = {}#email = []
+    rank = {} #rank = []
+    nom = []
+    (nof_phone,nof_email,nof_rank,nof_name) = (0,0,0,0)
+    pre_line = ''
+    for line in l:
+    #for i in range(len(l)):
+        ph = re.search('(\d{3}-\d{3}-\d{4})',line)
+        if ph:
+            #print(ph.string)
+            print(ph.group(1))
+            #phone.append(ph.group(1))
+            phone[nom[nof_name-1]] = ph.group(1)
+            nof_phone+=1
+
+        em = re.search('([\w\.]+@[\w\.]+)',line)
+        if em:
+            #print(em.string)
+            print(em.group(1))
+            #email.append(em.group(1))
+            nof_email+=1
+            if nof_email > nof_phone:
+                nof_email-=1
+        ra = re.search('(^[\w\s\.\"]{0,100}(Professor|Director|Coordinator)[\w\s&]{0,40}),',line)
+        if ra:
+            #print(ra.string)
+            print(ra.group(1))
+            #rank.append(ra.group(1))
+            nof_rank+=1
+            na = re.search('(\w+, \w+)',pre_line)
+            print(na.string)
+            print(na.group(1))
+            nom.append(na.group(1))
+            nof_name+=1
+        #if em:
+        #    a = input()
+        pre_line = line
+    print(nof_phone,nof_email,nof_rank,nof_name)
+    print(phone)
+    print(email)
+    print(rank)
+    print(nom)
+    for i in nom:
+        if i != 'Bergman, Casey':
+            print(i,phone[i])
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,71 @@
+import random
+def main():
+    n = 7
+    m = [0]*n
+    sum = 0
+    for i in range(n):
+        m[i] = random.randint(0,99)
+        sum+=m[i]
+    avg = sum/n
+    print(avg)
+import random
+def main():
+    n = 7
+    m = [0]*n
+    sum = 0
+    for i in range(n):
+        m[i] = random.randint(0,99)
+        sum+=m[i]
+        print(i, sum/(i+1))
+    avg = sum/n
+    print(avg)
+
+import random
+def main():
+    n = 7
+    m = [0]*n
+    avg = 0
+    #sum = 0
+    for i in range(n):
+        m[i] = random.randint(0,99)
+        avg = (avg*i+m[i])/(i+1)
+        #sum += m[i]
+        print(avg)
+    #print(sum/n)
+    print(avg)
+
+import random
+def main():
+    n = 7
+    m = [0]*n
+    sum_x = 0
+    sum_x2 = 0
+    for i in range(n):
+        m[i] = random.randint(0,99)
+        sum_x += m[i]
+        sum_x2 += m[i]**2
+    stddev = (sum_x2/n-(sum_x/n)**2)**0.5
+    print(m)
+    print(stddev)
+
+
+import random
+def main():
+    n = 7
+    m = [0]*n
+    for i in range(n):
+        m[i] = random.randint(0,99)
+    print("before sorting: ", m)
+    #bubble sorting
+    for i in range(n-1):
+        for j in range(n-1-i):
+            if m[j]> m[j+1]:
+                temp = m[j]
+                m[j] = m[j+1]
+                m[j+1] = temp
+        print(m)
+    print("after sorting: ",m)
+
+
+if __name__ == '__main__':
+    main()

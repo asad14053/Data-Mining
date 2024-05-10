@@ -1,0 +1,97 @@
+
+import random
+def main(name):
+    lot = []
+    for i in range(6):
+        redundant = True
+        while (redundant):
+            temp = random.randint(1,45)
+            redundant = False
+            for j in range(len(lot)): #check redundancy
+                if temp == lot[j]:
+                    redundant = True
+                    break
+            if redundant != True:
+                lot.append(temp)
+    print(lot)
+
+import random
+def main(name):
+    lot = []
+    #winning ticket
+    for i in range(6):
+        redundant = True
+        while (redundant):
+            temp = random.randint(1,45)
+            redundant = False
+            for j in range(len(lot)): #check redundancy
+                if temp == lot[j]:
+                    redundant = True
+                    break
+            if redundant != True:
+                lot.append(temp)
+    number_string = ""
+    for i in range(6):
+        number_string+= str(lot[i])+","
+    print(number_string)
+    print("winnning ticket:")
+    print(lot)
+    user = int(input("How many tickets do you want to buy? "))
+    myt = [[0]*6 for i in range(user)]
+    #user's ticket(s)
+    for n in range(user):
+        for i in range(6):
+            redundant = True
+            while (redundant):
+                temp = random.randint(1,45)
+                redundant = False
+                for j in range(len(myt[n])): #check redundancy
+                    if temp == myt[n][j]:
+                        redundant = True
+                        break
+                if redundant != True:
+                    myt[n][i] = temp
+
+    print(myt)
+
+import random
+def main(name):
+    lot = []
+    #winning ticket
+    for i in range(6):
+        redundant = True
+        while (redundant):
+            temp = random.randint(1,45)
+            redundant = False
+            for j in range(len(lot)): #check redundancy
+                if temp == lot[j]:
+                    redundant = True
+                    break
+            if redundant != True:
+                lot.append(temp)
+    number_string = ""
+    for i in range(6):
+        number_string+= str(lot[i])+","
+    print(number_string)
+    print("winnning ticket:")
+    print(lot)
+    user = int(input("How many tickets do you want to buy? "))
+    myt = [[0]*6 for i in range(user)]
+    #user's ticket(s)
+    for n in range(user):
+        for i in range(6):
+            redundant = True
+            while (redundant):
+                temp = random.randint(1,45)
+                redundant = False
+                for j in range(len(myt[n])): #check redundancy
+                    if temp == myt[n][j]:
+                        redundant = True
+                        break
+                if redundant != True:
+                    myt[n][i] = temp
+
+    print(myt)
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    main('PyCharm')

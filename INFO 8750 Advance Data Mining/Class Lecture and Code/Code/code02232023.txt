@@ -1,0 +1,99 @@
+
+def show_score(seq1, seq2, a,b,l): #nof row, nof column, list
+    for i in range(a):
+        if i < 1:  # i == 0
+            print('     ',end="")
+            for j in range(b-1):
+                print("  ",seq1[j],end="")
+            print()
+        if i < 1:
+            print(' ',end="")
+        else:
+            print(seq2[i-1],end="")
+        for j in range(b):
+            if l[i][j] < 0 or l[i][j] > 9:
+                print(" ",l[i][j],end="")
+            else:
+                print("  ",l[i][j],end="")
+        print()
+def show_direction(seq1, seq2, a,b,l): #nof row, nof column, list
+    for i in range(a):
+        if i < 1:  # i == 0
+            print('     ',end="")
+            for j in range(b-1):
+                print("  ",seq1[j],end="")
+            print()
+        if i < 1:
+            print(' ',end="")
+        else:
+            print(seq2[i-1],end="")
+        for j in range(b):
+                print("  ",l[i][j],end="")
+        print()
+
+def main():
+    match = 1
+    gap = -1 #gap penalty
+    mismatch = -1
+    seq1 = 'GCATGCT'
+    seq2 = 'GATTACA'
+    l1 = len(seq1)+1
+    l2 = len(seq2)+1
+    score = [[0]*l1 for i in range(l2)]
+    dir = [['X']*l1 for i in range(l2)]
+    for i in range(l2):
+        if i == 0:
+            for j in range(1,l1):
+                score[0][j] = score[0][j-1]+gap
+        else:
+            for j in range(l1):
+                if j == 0:
+                    score[i][0] = score[i-1][0]+gap
+                else:
+                    if seq1[j-1] == seq2[i-1]: # match
+                        dig = score[i-1][j-1]+match
+                    else:
+                        dig = score[i-1][j-1]+mismatch
+                    top = score[i-1][j] + gap
+                    left = score[i][j-1]+gap
+                    score[i][j] = max(dig,top,left)
+                    if score[i][j] == dig:
+                        dir[i][j] = 'D'
+                    elif score[i][j] == top:
+                        dir[i][j] = 'T'
+                    elif score[i][j] == left:
+                        dir[i][j] = 'L'
+
+    show_score(seq1, seq2, l2, l1, score)
+    show_direction(seq1,seq2,l2,l1,dir)
+    x = l1-1
+    y = l2-1
+    align1 = ''
+    align2 = ''
+    align3 = ''
+    while(x>0 or y>0):
+        if dir[y][x] == 'D':
+            align1 = seq1[x-1]+align1
+            align3 = seq2[y-1]+align3
+            if seq1[x-1] == seq2[y-1]:
+                align2 = '|'+align2
+            else:
+                align2 = ' '+align2
+            x-=1
+            y-=1
+        elif dir[y][x] == 'T':
+            align1 = '-'+align1
+            align3 = seq2[y-1]+align3
+            align2 = ' '+align2
+            y-=1
+        elif dir[y][x] == 'L':
+            align1 = seq1[x-1]+align1
+            align3 = '-'+align3
+            align2 = ' '+align2
+            x-=1
+    print(align1)
+    print(align2)
+    print(align3)
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    main()

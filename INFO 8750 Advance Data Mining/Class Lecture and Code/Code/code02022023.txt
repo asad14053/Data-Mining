@@ -1,0 +1,66 @@
+def main():
+    n = int(input("How many layers of pascal triangle you want? "))
+    ps = [[0]*5 for i in range(5)]
+    for i in range(5):
+        ps[i][0] = 1
+        for j in range(1,i+1):
+            ps[i][j] = ps[i-1][j-1]+ps[i-1][j]
+        for j in range(5-i):
+            print(" ",end="")
+        for j in range(5):
+            if ps[i][j] >0:
+                print(ps[i][j],"",end="")
+        print()
+
+
+
+def main():
+    #n = 3
+    n = int(input("what size of magic triangle do you want (n=)? "))
+    ms = [[0]*n for i in range(n)]
+    x = 0 #no. of row
+    y = n//2 #no. of column
+    ms[x][y] = 1
+    for i in range(1,n*n):
+        x-=1
+        y+=1
+        if x < 0:
+            x = n-1
+        if y == n:
+            y = 0
+        if ms[x][y]:
+            x+=1
+            y-=1
+            if x == n:
+                x = 0
+            if y < 0:
+                y = n-1
+            x+=1
+        ms[x][y] = i+1
+    #presentation
+    for i in range(n):
+        for j in range(n):
+            if ms[i][j] < 10:
+                print(" ",end="")
+            print(ms[i][j],"",end="")
+        print()
+
+import random
+def main():
+    n = 10
+    a = [0]*n
+    marker = 0
+    m1 = 1000
+    for i in range(n):
+        a[i] = random.randint(1,99)
+        if a[i] > marker:
+            marker = a[i]
+        if a[i] < m1:
+            m1 = a[i]
+    print(a)
+    print("The max = ",marker)
+    print("The min =",m1)
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    main()

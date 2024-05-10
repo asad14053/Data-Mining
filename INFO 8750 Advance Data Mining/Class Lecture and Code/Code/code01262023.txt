@@ -1,0 +1,135 @@
+import random
+import string
+def main():
+    message = input("Please input your message: ")
+    l = len(message)
+    secret_key = 7
+    secret = ''
+    for i in range(l*10):
+        if i % 10 == secret_key:
+            if message[i//10] == ' ':
+                secret+='a'
+            else:
+                secret+=message[i//10]
+        else:
+            secret+=random.choice(string.ascii_letters)
+    print(secret)
+
+import random
+import string
+def main():
+    message = input("Please input your message: ")
+    l = len(message)
+    secret_key = 7
+    secret = ''
+    for i in range(l*10):
+        if i % 10 == secret_key:
+            #if message[i//10] == ' ':
+            #    secret+='a'
+            #else:
+            secret+=message[i//10]
+        else:
+            secret+=random.choice(string.printable)#string.ascii_letters)
+    print(secret)
+
+
+
+
+
+#|J$lRI$Dx?9)t:R
+4N0:_c Z"T7vFlI.iaF.r<py5s>/\@'--^B >jf#? k^JTRkmfGGZ.hH[#7sW(WwuM9!f&8\e;r\0t4QrGu%sT-WVeC>g}dHMTvw<ZAaxSNssb3myY/
+
+
+import random
+import string
+
+def encoder(): #meet you on thursday 
+    message = input("Please input your message: ")
+    l = len(message)
+    secret_key1 = 12
+    secret_key2 = 23
+    secret = ''
+    for i in range(l*secret_key2):
+        if i % secret_key2 == secret_key1:
+            #if message[i//10] == ' ':
+            #    secret+='a'
+            #else:
+            secret+=message[i//secret_key2]
+        else:
+            secret+=random.choice(string.printable)#string.ascii_letters)
+    print(secret)
+    decoder(secret)
+    
+def decoder(secret):
+    #secret = "4N0:_c Z\"T7vFlI.iaF.r<py5s>/\@'--^B >jf#? k^JTRkmfGGZ.hH[#7sW(WwuM9!f&8\e;r\\0t4QrGu%sT-WVeC>g}dHMTvw<ZAaxSNssb3myY/"
+    secret = "ClQjVekIlyFcoBwmwtCZngZGhYt yqRPCcptDiJELHFNfGdstVniXhefm ExKYZUcSLcJjKEeMfQKoFvrUcVthqlIxFKKPmindQUkyrNfCj JXfxZSGsqtkWkkBGUWZoJJXTbChRidhmWMRccWiabdDhuCSwhyni"
+    key = 7
+    l = len(secret)
+    for k in range(10):
+        real =''
+        for i in range(l):
+            if i % 10 == key:
+                real+= secret[i]
+        print(real)
+
+
+def main():
+    h = [] #list
+    h.append(170)
+    h.append(155)
+    h.append(153)
+    h.append(163)
+    h.append(170)
+    print(h) 
+    #list has index and is changable
+    h[0] = 180
+    h[4] += 3
+    h[3] -= 0.5
+    print(h)
+    avg = 0
+    for i in range(len(h)):
+        avg+=h[i]
+    avg/=len(h)
+    print(avg)
+
+def main():
+    cars = ["toyota","Volvo","Honda"]
+    cars.append("BMW")
+    for i in cars:
+        print(i)
+    for i in range(len(cars)):
+        print(cars[i])
+
+
+def main():
+    color = ["red","orange","yellow","green","blue","white","purple"]
+    print(color)
+    color.append("black")
+    print(color)
+    color.pop(2)
+    print(color)
+    color.insert(2,"cyan")
+    print(color)
+    color.remove("cyan")
+    print(color)
+    print(color.index("blue"))
+    color.reverse()
+    print(color)
+    color.sort()
+    color.reverse()
+    print(color)
+
+
+
+
+
+
+
+if __name__ == '__main__':
+    encoder()
+
+
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    main()

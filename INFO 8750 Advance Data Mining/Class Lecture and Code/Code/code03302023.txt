@@ -1,0 +1,80 @@
+import urllib.request
+import re
+def download_pdb(pdb_id):
+    pdbs = [] #('1A6W','1A2B','1A3B')
+    pdbs.append(pdb_id)
+    for pdb_id in pdbs:
+        path = "https://files.rcsb.org/view/"+pdb_id+".pdb"
+        file_path = "C://INFO6750//"+pdb_id+".pdb"
+
+        print(path, file_path)
+
+        urllib.request.urlretrieve(path, file_path)
+        print(file_path, ' is downloaded...')
+def main():
+    pdb_id = '1A6W'
+    download_pdb(pdb_id)
+    f1 = open("C://INFO6750//1A6W.pdb",'r')
+    inf = f1.readlines()
+    x = []
+    y = []
+    z = []
+    lx = []
+    ly = []
+    lz = []
+    sen1 = []
+    sen2 = []
+    sen3 = []
+    atom = []
+    hatom = []
+    lsen1 = []
+    lsen2 = []
+    lsen3 = []
+    nof_atom = 0
+    nof_het = 0
+    for i in inf:
+        #print(i)
+        a = re.search('(^ATOM\s+\d{1,4}\s\s(\w+))(\s+[A-Z]{3}\s+\w\s+\d+\s{4})([\s\d\.\-]{8})([\s\d\.\-]{8})([\s\d\.\-]{8})(.*$)', i)
+        b = re.search('(^HETATM\s+\d{1,4}\s\s(\w+))(\s+[A-Z]{3}\s+\w\s+\d+\s{4})([\s\d\.\-]{8})([\s\d\.\-]{8})([\s\d\.\-]{8})(.*$)',i)
+        if a:
+            #print(a.group(1),a.group(4),a.group(5),a.group(6))
+            atom.append(a.group(2))
+            #x.append(float(a.group(4)))
+            x.append(float(i[30:38]))
+            y.append(float(i[38:46]))
+            z.append(float(i[46:54]))
+            #print(i[30:38])
+            #y.append(float(a.group(5)))
+            #z.append(float(a.group(6)))
+            sen1.append(a.group(1))
+            sen2.append(a.group(3))
+            sen3.append(a.group(7))
+            nof_atom+=1
+        if b:
+            c = re.search('HOH',i)
+            if c:
+                continue
+            #print(a.group(1),a.group(4),a.group(5),a.group(6))
+            hatom.append(b.group(2))
+            lx.append(float(b.group(4)))
+            ly.append(float(b.group(5)))
+            lz.append(float(b.group(6)))
+            lsen1.append(b.group(1))
+            lsen2.append(b.group(3))
+            lsen3.append(b.group(7))
+            nof_het+=1
+    coor = [x,y,z]
+    lcoor = [lx,ly,lz]
+    #print(coor)
+    f2 = open('C://INFO6750//1new.pdb', 'w')
+    for i in range(nof_atom):
+        s = sen1[i]+sen2[i]+str(coor[0][i])+str(coor[1][i])+str(coor[2][i])+sen3[i]+'\n'
+        f2.write("%s%s%8.3f%8.3f%8.3f%s\n" %(sen1[i],sen2[i],coor[0][i],coor[1][i],coor[2][i],sen3[i]))
+    f2.write('TER\n')
+    for i in range(nof_het):
+        s = sen1[i] + sen2[i] + str(coor[0][i]) + str(coor[1][i]) + str(coor[2][i]) + sen3[i] + '\n'
+        f2.write("%s%s%8.3f%8.3f%8.3f%s\n" % (lsen1[i], lsen2[i], lcoor[0][i], lcoor[1][i], lcoor[2][i], lsen3[i]))
+    f2.write('TER\n')
+
+if __name__ == '__main__':
+    main()

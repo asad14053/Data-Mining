@@ -1,0 +1,60 @@
+def main():
+    game2023 = {"Auburn":"Mar-1", "Georgia Tech":"Oct-1", "Alabama":"Mar-15", "Auburn":"May-1"}
+    #game2023 = {}
+    print(game2023)
+    game2023["New York"] = "April 1"
+    print(game2023)
+    game2023["Auburn"] = "April 15"
+    print(game2023.keys())
+    print(game2023.values())
+    for i in game2023.keys():
+        print(i)
+        print(game2023[i])
+    for i in game2023.values():
+        print(i)
+    for i,j in game2023.items():
+        print(i,j)
+    print(game2023)
+    game2023.popitem()
+    print(game2023)
+    game2023.pop("Georgia Tech")
+    print(game2023)
+    auburn_games = ["Mar-1","Mar-2","Mar-3"]
+    game2023["Auburn"] = auburn_games
+    print(game2023)
+
+import random
+def f2(a):
+    a *= 2 #a == 4
+    return a
+def f1(a):
+    a +=1 #a == 2 #
+    print(a)
+    for i in range(3):
+        a = f2(a) #a == 4
+        print(a)
+def get_random():
+    x = random.randint(1,99)
+    return(x)
+def say_hello(n):
+    print("hello",n)
+def hello():
+    print('Hello')
+def addition(a,b):
+    c = a+b
+    return c
+def main():
+    a = 1
+    b = 2
+    c = addition(a,b)
+    hello()#no send-out information no return
+    name = 'Paul'
+    say_hello(name)
+    print(c)
+    a = f1(a)
+    #d = get_random()
+    #print(d)
+    #print(get_random())
+main()
+
+main()
